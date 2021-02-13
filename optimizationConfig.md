@@ -1,7 +1,7 @@
 <!--
  * @Author: 邱狮杰
  * @Date: 2021-01-16 20:20:57
- * @LastEditTime: 2021-01-17 22:06:54
+ * @LastEditTime: 2021-02-13 22:59:46
  * @FilePath: /webpack/optimizationConfig.md
  * @Description: 描述
 -->
@@ -103,3 +103,62 @@ module: {
 sideEffects: false; //  表示所有代码都无副作用(都可以进行tree shaking),问题是可能把css\babal(文件)忽略打包
 sideEffects: ["*.css"]; // 标记不要进行tree shaking 的资源
 ```
+
+# code split
+
+```javascript
+/**
+ 可以将node_modules的代码打包成一个chunk最终输出
+ import $ from 'jquery'
+ console.log($)
+ // 该配置这样会将jquery单独打包称为一个chunk，如果没有该配置则会讲jquery和自己的js代码打包称为一个chunk，从而没有实现代码分割的效果
+ 当多个文件引用同一个文件时也会只引用一个文件chunk
+
+
+  如果使用单文件入口也想使用代码分割，则需要改写引入依赖的写法
+  import(／* webpackChunkName：'test'    *／"filename").then().catch() // 即可分割
+*/
+
+optimization: {
+  splitChunks: {
+    chunks: "all";
+  }
+}
+```
+
+# 懒加载和预加载
+
+```javascript
+function fn() {
+  // 懒加载,并不会重新加载，第二次加载时则会读取缓存，上来不会加载也不会执行，并行加载
+  // 预加载prefetch,一上来文件会被加载，但不会被执行，等其他资源加载完毕浏览器空闲后在加载
+  import(/* webpackPrefetch:true  */ "./test.js").then().catch();
+}
+```
+
+# 多进程打包
+
+```javascript
+// npm i thread-loader -D
+/**
+有利有弊，进程启动大概都是600ms,一般只在大工程中，工作消耗时间较长的情况下使用,一般使用在babel上
+use:[
+  "thread-loader",
+  {
+    loader:"babel-loader"
+  }
+]
+*/
+```
+
+# externals
+
+```javascript
+//当我们忽略打包的时候需要手动cdn引入进来
+externals: {
+  //忽略包名 ---- npm下的包名
+  jquery: "jQuery";
+}
+```
+
+# dll

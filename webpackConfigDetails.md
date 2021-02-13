@@ -1,7 +1,7 @@
 <!--
  * @Author: 邱狮杰
  * @Date: 2021-01-10 16:48:37
- * @LastEditTime: 2021-01-16 20:19:18
+ * @LastEditTime: 2021-02-13 21:59:44
  * @FilePath: /webpack/webpackConfigDetails.md
  * @Description: 描述
 -->
@@ -18,7 +18,7 @@
 
 # output 输出
 
-- `filename`: 可以指定打包文件`[main].js`，也可以指定打包目录`js/[main].js`
+- `filename`: 可以指定打包文件`[main].js`，也可以指定打包目录`js/[main].[contenthash:10].js`
 
 - `path`:将来所有输出的公共目录,输出文件路径`path.resolve(__dirname,'build')`
 
